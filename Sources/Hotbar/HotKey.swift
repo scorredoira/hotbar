@@ -2,17 +2,24 @@ import AppKit
 import Carbon.HIToolbox
 
 enum HotKey {
-    private static var ref: EventHotKeyRef?
-    private static var handler: (() -> Void)?
+    private static var refs: [EventHotKeyRef?] = []
+    private static var handlers: [UInt32: () -> Void] = [:]
 
     static func register(keyCode: Int, action: @escaping () -> Void) {
-        handler = action
-        var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
-        InstallEventHandler(GetApplicationEventTarget(), { _, _, _ in
-            DispatchQueue.main.async { HotKey.handler?() }
-            return noErr
-        }, 1, &eventType, nil, nil)
-        let id = EventHotKeyID(signature: OSType(0x48544252), id: 1)
-        RegisterEventHotKey(UInt32(keyCode), 0, id, GetApplicationEventTarget(), 0, &ref)
+        if handlers.isEmpty {
+            var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
+            InstallEventHandler(GetApplicationEventTarget(), { _, event, _ in
+                var id = EventHotKeyID()
+                GetEventParameter(event, EventParamName(kEventParamDirectObject), EventParamType(typeEventHotKeyID),
+                                  nil, MemoryLayout<EventHotKeyID>.size, nil, &id)
+                DispatchQueue.main.async { HotKey.handlers[id.id]?() }
+                return noErr
+            }, 1, &eventType, nil, nil)
+        }
+        let id = UInt32(handlers.count + 1)
+        handlers[id] = action
+        var ref: EventHotKeyRef?
+        RegisterEventHotKey(UInt32(keyCode), 0, EventHotKeyID(signature: OSType(0x48544252), id: id), GetApplicationEventTarget(), 0, &ref)
+        refs.append(ref)
     }
 }

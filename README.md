@@ -6,6 +6,6 @@ Menu bar app with three actions:
 - **Turn Off Screen** (F18): `pmset displaysleepnow`.
 - **Sleep** (F19): `pmset sleepnow`.
 
-F14 is swallowed so it no longer dims the screen.
+F14 is remapped to F20 (with `hidutil`, on every keyboard as it connects) so it no longer dims the screen.
 
 Install with `./install.sh`. It starts at login. Cycling windows needs Accessibility permission (System Settings → Privacy & Security → Accessibility).

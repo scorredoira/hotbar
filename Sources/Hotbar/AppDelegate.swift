@@ -19,9 +19,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.image = NSImage(systemSymbolName: "bolt.horizontal", accessibilityDescription: "Hotbar")
 
         let menu = NSMenu()
-        let cycle = menu.addItem(withTitle: "Cycle Windows", action: #selector(cycleWindows), keyEquivalent: "")
+        let cycle = menu.addItem(withTitle: "Cycle Windows", action: #selector(cycleWindows), keyEquivalent: String(UnicodeScalar(NSF15FunctionKey)!))
+        cycle.keyEquivalentModifierMask = []
         cycle.image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
-        cycle.toolTip = "F15"
         let screen = menu.addItem(withTitle: "Turn Off Screen", action: #selector(turnOffScreen), keyEquivalent: "")
         screen.image = NSImage(systemSymbolName: "display", accessibilityDescription: nil)
         let sleep = menu.addItem(withTitle: "Sleep", action: #selector(sleepMac), keyEquivalent: "")

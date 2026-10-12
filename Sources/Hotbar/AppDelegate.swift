@@ -7,6 +7,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupStatusItem()
+        HotKey.register(keyCode: kVK_F14) {}
         HotKey.register(keyCode: kVK_F15) { Windows.cycleFrontApp() }
         HotKey.register(keyCode: kVK_F18) { Power.run("displaysleepnow") }
         HotKey.register(keyCode: kVK_F19) { Power.run("sleepnow") }

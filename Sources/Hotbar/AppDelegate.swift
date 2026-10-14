@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         KeyRemap.start()
         HotKey.register(keyCode: kVK_F15) { Windows.cycleFrontApp() }
         HotKey.register(keyCode: kVK_ANSI_B, modifiers: controlKey | cmdKey) { Power.run("displaysleepnow") }
+        HotKey.register(keyCode: kVK_ANSI_H, modifiers: controlKey | cmdKey) { Handy.restart() }
         HotKey.register(keyCode: kVK_F19) { Power.run("sleepnow") }
         if SMAppService.mainApp.status != .enabled {
             try? SMAppService.mainApp.register()
@@ -31,6 +32,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let sleep = menu.addItem(withTitle: "Sleep", action: #selector(sleepMac), keyEquivalent: String(UnicodeScalar(NSF19FunctionKey)!))
         sleep.keyEquivalentModifierMask = []
         sleep.image = NSImage(systemSymbolName: "moon", accessibilityDescription: nil)
+        let handy = menu.addItem(withTitle: "Restart Handy", action: #selector(restartHandy), keyEquivalent: "h")
+        handy.keyEquivalentModifierMask = [.control, .command]
+        handy.image = NSImage(systemSymbolName: "mic", accessibilityDescription: nil)
         menu.addItem(.separator())
         menu.addItem(withTitle: "Quit Hotbar", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         for item in menu.items where item.action != #selector(NSApplication.terminate(_:)) {
@@ -46,6 +50,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func turnOffScreen() {
         Power.run("displaysleepnow")
+    }
+
+    @objc private func restartHandy() {
+        Handy.restart()
     }
 
     @objc private func sleepMac() {

@@ -5,7 +5,7 @@ enum HotKey {
     private static var refs: [EventHotKeyRef?] = []
     private static var handlers: [UInt32: () -> Void] = [:]
 
-    static func register(keyCode: Int, action: @escaping () -> Void) {
+    static func register(keyCode: Int, modifiers: Int = 0, action: @escaping () -> Void) {
         if handlers.isEmpty {
             var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
             InstallEventHandler(GetApplicationEventTarget(), { _, event, _ in
@@ -19,7 +19,7 @@ enum HotKey {
         let id = UInt32(handlers.count + 1)
         handlers[id] = action
         var ref: EventHotKeyRef?
-        RegisterEventHotKey(UInt32(keyCode), 0, EventHotKeyID(signature: OSType(0x48544252), id: id), GetApplicationEventTarget(), 0, &ref)
+        RegisterEventHotKey(UInt32(keyCode), UInt32(modifiers), EventHotKeyID(signature: OSType(0x48544252), id: id), GetApplicationEventTarget(), 0, &ref)
         refs.append(ref)
     }
 }

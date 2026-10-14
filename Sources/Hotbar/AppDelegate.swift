@@ -9,7 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         setupStatusItem()
         KeyRemap.start()
         HotKey.register(keyCode: kVK_F15) { Windows.cycleFrontApp() }
-        HotKey.register(keyCode: kVK_F18) { Power.run("displaysleepnow") }
+        HotKey.register(keyCode: kVK_ANSI_B, modifiers: controlKey | cmdKey) { Power.run("displaysleepnow") }
         HotKey.register(keyCode: kVK_F19) { Power.run("sleepnow") }
         if SMAppService.mainApp.status != .enabled {
             try? SMAppService.mainApp.register()
@@ -25,8 +25,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let cycle = menu.addItem(withTitle: "Cycle Windows", action: #selector(cycleWindows), keyEquivalent: String(UnicodeScalar(NSF15FunctionKey)!))
         cycle.keyEquivalentModifierMask = []
         cycle.image = NSImage(systemSymbolName: "macwindow.on.rectangle", accessibilityDescription: nil)
-        let screen = menu.addItem(withTitle: "Turn Off Screen", action: #selector(turnOffScreen), keyEquivalent: String(UnicodeScalar(NSF18FunctionKey)!))
-        screen.keyEquivalentModifierMask = []
+        let screen = menu.addItem(withTitle: "Turn Off Screen", action: #selector(turnOffScreen), keyEquivalent: "b")
+        screen.keyEquivalentModifierMask = [.control, .command]
         screen.image = NSImage(systemSymbolName: "display", accessibilityDescription: nil)
         let sleep = menu.addItem(withTitle: "Sleep", action: #selector(sleepMac), keyEquivalent: String(UnicodeScalar(NSF19FunctionKey)!))
         sleep.keyEquivalentModifierMask = []

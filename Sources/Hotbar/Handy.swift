@@ -7,6 +7,10 @@ enum Handy {
         kill.arguments = ["-9", "-x", "handy"]
         try? kill.run()
         kill.waitUntilExit()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { launch() }
+    }
+
+    private static func launch() {
         let open = Process()
         open.executableURL = URL(fileURLWithPath: "/usr/bin/open")
         open.arguments = ["-a", "Handy"]
